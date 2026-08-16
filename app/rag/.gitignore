@@ -1,0 +1,26 @@
+# Virtual environments
+.venv/
+.venv-1/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# Vector database
+data/chroma_db/
+
+# Uploaded/private documents
+data/raw/
+
+# Processed data
+data/processed/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
