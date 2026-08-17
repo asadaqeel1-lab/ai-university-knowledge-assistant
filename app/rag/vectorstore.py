@@ -1,18 +1,38 @@
 from pathlib import Path
 
-from langchain_community.document_loaders import Docx2txtLoader
+from langchain_community.document_loaders import (
+    Docx2txtLoader,
+    PyPDFLoader,
+)
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 
 
-DOCUMENT_PATH = "data/raw/Machine Learning Notes.docx"
+DATA_PATH = Path("data/raw")
 VECTOR_DB_PATH = "data/chroma_db"
+COLLECTION_NAME = "university_knowledge"
 
 
-def load_and_split_document():
-    loader = Docx2txtLoader(DOCUMENT_PATH)
-    documents = loader.load()
+def load_documents():
+    documents = []
+
+    for file_path in DATA_PATH.iterdir():
+
+        if file_path.suffix.lower() == ".docx":
+            print(f"Loading DOCX: {file_path.name}")
+            loader = Docx2txtLoader(str(file_path))
+            documents.extend(loader.load())
+
+        elif file_path.suffix.lower() == ".pdf":
+            print(f"Loading PDF: {file_path.name}")
+            loader = PyPDFLoader(str(file_path))
+            documents.extend(loader.load())
+
+    return documents
+
+
+def split_documents(documents):
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
@@ -28,6 +48,7 @@ def load_and_split_document():
 
 
 def create_vector_store(chunks):
+
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
@@ -36,16 +57,7 @@ def create_vector_store(chunks):
         documents=chunks,
         embedding=embeddings,
         persist_directory=VECTOR_DB_PATH,
-        collection_name="university_knowledge"
+        collection_name=COLLECTION_NAME
     )
 
     return vector_store
-
-
-if __name__ == "__main__":
-    chunks = load_and_split_document()
-
-    vector_store = create_vector_store(chunks)
-
-    print("\nVector database created successfully! ✅")
-    print(f"Stored at: {Path(VECTOR_DB_PATH).absolute()}")

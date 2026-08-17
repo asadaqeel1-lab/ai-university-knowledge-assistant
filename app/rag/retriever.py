@@ -27,7 +27,7 @@ def create_retriever():
 if __name__ == "__main__":
     retriever = create_retriever()
 
-    query = "What programming languages does Asad know?"
+    query = "What is machine learning?"
 
     documents = retriever.invoke(query)
 
