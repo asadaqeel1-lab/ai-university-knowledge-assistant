@@ -1,5 +1,0 @@
-Reddit Sentiment Classification & Power BI Dashboard	Python, NLP, Reddit API, Power BI
-
-Engineered a Reddit-to-dashboard pipeline: API data collection, NLP preprocessing, and TextBlob-based sentiment classification on 50 posts across two subreddits
-
-Built an interactive Power BI dashboard with 6 visuals and slicers to analyze sentiment trends, exporting classified datasets for stakeholder useÿÿÿÿÿ
